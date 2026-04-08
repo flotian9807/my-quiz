@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十二星座决定你的历史身份</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #e8e8e8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2px;
+            padding: 50px 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .lang-switch {
+            text-align: right;
+            margin-bottom: 40px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid #999;
+            padding: 6px 16px;
+            margin-left: 8px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            color: #666;
+        }
+
+        .lang-btn.active {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 15px;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .intro {
+            text-align: center;
+            color: #888;
+            margin-bottom: 50px;
+            line-height: 1.8;
+            font-size: 14px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 3px solid #333;
+        }
+
+        .question {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question:last-of-type {
+            border-bottom: none;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 18px;
+            color: #222;
+            font-size: 15px;
+        }
+
+        .question-number {
+            color: #999;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fafafa;
+            border: 1px solid transparent;
+        }
+
+        .option:hover {
+            background: #f5f5f5;
+            border-color: #ddd;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            margin-top: 3px;
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 40px;
+            letter-spacing: 2px;
+        }
+
+        .submit-btn:hover {
+            background: #000;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+            margin-top: 50px;
+            padding: 40px 30px;
+            background: #f9f9f9;
+            border-left: 4px solid #333;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .result p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: #555;
+        }
+
+        .reset-btn {
+            margin-top: 25px;
+            padding: 10px 24px;
+            background: white;
+            color: #333;
+            border: 1px solid #333;
+            border-radius: 2px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #333;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .question {
+                padding-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="switchLang('zh')">中文</button>
+            <button class="lang-btn" onclick="switchLang('en')">English</button>
+        </div>
+
+        <h1 id="title"></h1>
+        <div class="subtitle" id="subtitle"></div>
+        <div class="intro" id="intro"></div>
+
+        <form id="quizForm"></form>
+
+        <button class="submit-btn" id="submitBtn" onclick="calculateResult()"></button>
+
+        <div class="result" id="result">
+            <h2 id="resultTitle"></h2>
+            <p id="resultDesc"></p>
+            <button class="reset-btn" id="resetBtn" onclick="resetQuiz()"></button>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'zh';
+
+        const translations = {
+            zh: {
+                title: "十二星座决定你的历史身份",
+                subtitle: "开玩笑的，这场测试和十二星座没有关系，但真的可以测测你的历史身份！现在来试试吧！",
+                intro: "<strong>说明：</strong>根据你的第一直觉选A-E，每题只选1个。做完后按下方计分，看看你更像谁！<br><br><strong>套盾环节：</strong>纯娱乐测试，世界本是灰色的——每种角色都有它的道理与价值，没有绝对的对错，也没有个体能逃过这个社会的影响",
+                submitBtn: "查看结果",
+                resetBtn: "重新测试",
+                alertMsg: "请完成所有题目！",
+                questions: [
+                    { q: "你比较喜欢的颜色组合是？", options: { A: "浅灰 + 银白", B: "紫色 + 白色", C: "深蓝 + 黑色", D: "米色 + 淡粉", E: "棕色 + 深红" }},
+                    { q: "早晨醒来，你第一件想做的事是？", options: { A: "继续躺着，看看天花板", B: "起床，开始新的一天", C: "先想想今天的日程安排", D: "先想想乱七八糟的事情", E: "起床去找自己的家人" }},
+                    { q: "你更喜欢哪种天气？", options: { A: "阴天，不冷不热", B: "晴天，阳光明媚", C: "多云，光线柔和", D: "微雨，适合待在室内", E: "雾天，安静朦胧" }},
+                    { q: "选一种你最喜欢的织物质感：", options: { A: "光滑的丝绸", B: "粗糙的帆布", C: "挺括的棉麻", D: "柔软的羊绒", E: "厚实的羊毛" }},
+                    { q: "你比较喜欢哪种节奏的音乐？", options: { A: "很慢，几乎听不出节拍", B: "快速，让人想动起来", C: "稳定，有规律的节奏", D: "舒缓，如流水一般", E: "典雅，手里的快乐水变成了红酒" }},
+                    { q: "如果选一个地方独处，你会选？", options: { A: "空旷的湖边", B: "热闹街道的咖啡馆窗边", C: "安静的图书馆角落", D: "自家的小书房", E: "老房子的阁楼" }},
+                    { q: "你更喜欢哪种笔的手感？", options: { A: "圆珠笔，比较有质感", B: "粗头马克笔，相当地有质感", C: "中性笔，流畅且精确", D: "自动铅笔，可以擦掉，续航也好", E: "钢笔，需要小心使用但是非常带派" }},
+                    { q: "你更喜欢哪种光线？", options: { A: "昏暗的，任由意识摇摇晃晃", B: "明亮的白炽灯，时代在进步", C: "冷色调的日光灯，这就是工作态度", D: "温暖的黄色灯光，就像夏日的傍晚", E: "烛光或壁炉的光，复古且令人安心" }},
+                    { q: "选一种你喜欢的食物口味：", options: { A: "清淡", B: "辛辣", C: "微苦", D: "甜蜜", E: "偏酸" }},
+                    { q: "你更喜欢哪种走路的速度？", options: { A: "慢，比较有松弛感", B: "快，人生不能浪费在走路上", C: "匀速，步伐稳定", D: "时快时慢，看心情", E: "不紧不慢，中庸之道尽在手中" }},
+                    { q: "选一种你比较喜欢的植物：", options: { A: "蒲公英", B: "紫罗兰", C: "红山楂", D: "蕨类植物", E: "我不在意植物" }},
+                    { q: "你更喜欢哪种座位位置？", options: { A: "最后一排靠墙", B: "第一排正中间", C: "中间靠过道", D: "靠窗的位置", E: "固定的老位置" }},
+                    { q: "选一种你最喜欢的饮品温度：", options: { A: "常温", B: "很烫，冒着热气", C: "温热，正好能喝", D: "热，勉强能喝，嗦一点会很暖和", E: "冷，有的时候放了冰块" }},
+                    { q: "你更喜欢哪种说话的音量？", options: { A: "很轻，几乎听不见，恰好也不是很想和活人交流", B: "很大声，让人都能听到", C: "清晰适中", D: "温柔细语", E: "沉稳有力" }},
+                    { q: "选一种你比较喜欢的纸张：", options: { A: "半透明的描图纸", B: "彩色卡纸", C: "普通白色打印纸", D: "米黄色笔记本纸", E: "厚重的羊皮纸" }},
+                    { q: "你更喜欢哪种睡眠时间？", options: { A: "英格兰掌管睡觉的皇帝", B: "很少，精力充沛", C: "固定8小时黄金梦乡", D: "能多睡就多睡一点", E: "早睡早起" }},
+                    { q: "选一种你比较喜欢的建筑风格：", options: { A: "极简的玻璃盒子，在阳光下会反光闪瞎别人", B: "现代的不规则造型，似乎能领悟一点当代艺术", C: "功能性的建筑，这就是我的美学", D: "带花园的小别墅，享受生活的既视感", E: "大理石重工雕刻的建筑，工人似乎燃尽了" }},
+                    { q: "你更喜欢哪种握手的力度？", options: { A: "走个流程", B: "用力握紧", C: "适中有力", D: "温柔但持久", E: "稳重有分量" }},
+                    { q: "选一种你最喜欢的时间段：", options: { A: "深夜，万籁俱寂", B: "清晨，刚刚天亮", C: "上午，思维清晰", D: "黄昏，光线柔和", E: "晚上，一天将尽" }}
+                ],
+                results: {
+                    A: { title: "纯路人", desc: "你更像历史的安静旁观者，毕竟有明显站队立场的向来都是少部分人，更多的人只是历史的经历者。（这个问卷的作者也是这样的人）" },
+                    B: { title: "支持者", desc: "你更像 Emmeline Pankhurst（积极的女权运动领头人，创立WSPU，用直接行动推动变革）。" },
+                    C: { title: "支持者的伴侣", desc: "你更像 Richard Pankhurst（Emmeline（一位女权运动领头人）的丈夫，律师与坚定后盾，为妇女权利起草法案，提供理性支持）。" },
+                    D: { title: "反对者", desc: "你更像 Mary Ward（Mrs. Humphry Ward，反女权投票权运动的重要领袖，小说家，主张女性通过地方慈善而非全国政治发挥作用）。" },
+                    E: { title: "反对者的伴侣", desc: "你更像 Thomas Humphry Ward（Mary Ward（一位反女权者）的丈夫，作家与编辑，与妻子共享保守观点，提供家庭与智力上的稳固陪伴）。" }
+                }
+            },
+            en: {
+                title: "Zodiac Signs Determine Your Historical Identity",
+                subtitle: "Just kidding! This test has nothing to do with zodiac signs, but it can really reveal your historical identity! Give it a try!",
+                intro: "<strong>Instructions:</strong> Choose A–E based on your first instinct. Only one choice per question. Calculate your score at the end to see who you're most like!<br><br><strong>Disclaimer:</strong> This is purely for entertainment. The world is gray — every role has its own reasoning and value. There's no absolute right or wrong, and no individual can escape society's influence.",
+                submitBtn: "View Results",
+                resetBtn: "Retake Test",
+                alertMsg: "Please answer all questions!",
+                questions: [
+                    { q: "Which color combination do you prefer?", options: { A: "Light gray + Silver white", B: "Purple + White", C: "Deep blue + Black", D: "Beige + Light pink", E: "Brown + Deep red" }},
+                    { q: "When you wake up in the morning, what's the first thing you want to do?", options: { A: "Stay in bed and stare at the ceiling", B: "Get up and start a new day", C: "Think about today's schedule first", D: "Think about random stuff first", E: "Get up and find your family" }},
+                    { q: "What kind of weather do you prefer?", options: { A: "Overcast, neither cold nor hot", B: "Sunny, bright and cheerful", C: "Cloudy, soft light", D: "Light rain, perfect for staying indoors", E: "Foggy, quiet and hazy" }},
+                    { q: "Choose your favorite fabric texture:", options: { A: "Smooth silk", B: "Rough canvas", C: "Crisp cotton-linen", D: "Soft cashmere", E: "Thick wool" }},
+                    { q: "What rhythm of music do you prefer?", options: { A: "Very slow, barely noticeable beat", B: "Fast, makes you want to move", C: "Steady, regular rhythm", D: "Soothing, like flowing water", E: "Elegant — the soda in your hand just turned into red wine" }},
+                    { q: "If you could choose a place to be alone, where would you go?", options: { A: "By an empty lakeside", B: "Window seat at a café on a busy street", C: "Quiet corner of a library", D: "Your own small study", E: "Attic of an old house" }},
+                    { q: "What pen feel do you prefer?", options: { A: "Ballpoint pen, has a nice feel", B: "Thick marker, quite the texture", C: "Gel pen, smooth and precise", D: "Mechanical pencil, erasable and long-lasting", E: "Fountain pen, needs care but incredibly classy" }},
+                    { q: "What kind of lighting do you prefer?", options: { A: "Dim, letting consciousness drift", B: "Bright incandescent light — progress marches on", C: "Cool-toned fluorescent — this is work ethic", D: "Warm yellow glow, like a summer evening", E: "Candlelight or fireplace — vintage and reassuring" }},
+                    { q: "Choose your favorite food flavor:", options: { A: "Mild", B: "Spicy", C: "Slightly bitter", D: "Sweet", E: "Sour" }},
+                    { q: "What walking speed do you prefer?", options: { A: "Slow, nice and relaxed", B: "Fast — life shouldn't be wasted on walking", C: "Steady pace, stable steps", D: "Sometimes fast, sometimes slow — depends on mood", E: "Unhurried — the golden mean is in your hands" }},
+                    { q: "Choose a plant you like:", options: { A: "Dandelion", B: "Violet", C: "Red hawthorn", D: "Fern", E: "I don't care about plants" }},
+                    { q: "What seating position do you prefer?", options: { A: "Back row against the wall", B: "Front row center", C: "Middle aisle seat", D: "Window seat", E: "Your regular old spot" }},
+                    { q: "Choose your favorite beverage temperature:", options: { A: "Room temperature", B: "Very hot, steaming", C: "Warm, just right to drink", D: "Hot, barely drinkable — a sip feels very warm", E: "Cold, sometimes with ice" }},
+                    { q: "What speaking volume do you prefer?", options: { A: "Very quiet, barely audible — not keen on interacting with the living anyway", B: "Very loud, everyone can hear", C: "Clear and moderate", D: "Gentle whisper", E: "Steady and powerful" }},
+                    { q: "Choose a type of paper you like:", options: { A: "Semi-transparent tracing paper", B: "Colored cardstock", C: "Plain white printer paper", D: "Cream-colored notebook paper", E: "Heavy parchment" }},
+                    { q: "What sleep schedule do you prefer?", options: { A: "The Emperor of Sleep in England", B: "Very little — full of energy", C: "A fixed 8-hour golden slumber", D: "Sleep as much as possible", E: "Early to bed, early to rise" }},
+                    { q: "Choose an architectural style you like:", options: { A: "Minimalist glass box — reflects sunlight to blind passers-by", B: "Modern irregular shapes — you almost grasp contemporary art", C: "Functional buildings — this is my aesthetic", D: "Small villa with a garden — the vibe of enjoying life", E: "Marble heavy-carved buildings — the workers seem burned out" }},
+                    { q: "What handshake strength do you prefer?", options: { A: "Just going through the motions", B: "Firm grip", C: "Moderate and firm", D: "Gentle but lasting", E: "Steady and substantial" }},
+                    { q: "Choose your favorite time of day:", options: { A: "Late night, complete silence", B: "Early morning, just dawn", C: "Mid-morning, clear thinking", D: "Dusk, soft light", E: "Evening, the day drawing to a close" }}
+                ],
+                results: {
+                    A: { title: "Pure Bystander", desc: "You're more like a quiet observer of history. After all, those who clearly take sides have always been the minority — most people are simply experiencers of history. (The author of this quiz is one of them.)" },
+                    B: { title: "Supporter", desc: "You're more like Emmeline Pankhurst — an active leader of the women's rights movement, founder of the WSPU, who promoted change through direct action." },
+                    C: { title: "Supporter's Partner", desc: "You're more like Richard Pankhurst — husband of Emmeline (a women's rights movement leader), a lawyer and steadfast supporter who drafted bills for women's rights and provided rational support." },
+                    D: { title: "Opponent", desc: "You're more like Mary Ward (Mrs. Humphry Ward) — an important leader of the anti-women's suffrage movement, a novelist who advocated for women's influence through local charity rather than national politics." },
+                    E: { title: "Opponent's Partner", desc: "You're more like Thomas Humphry Ward — husband of Mary Ward (an anti-feminist), a writer and editor who shared conservative views with his wife and provided stable family and intellectual companionship." }
+                }
+            }
+        };
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function renderQuestions() {
+            const form = document.getElementById('quizForm');
+            form.innerHTML = '';
+            const data = translations[currentLang];
+
+            data.questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+
+                const questionText = document.createElement('div');
+                questionText.className = 'question-text';
+                questionText.innerHTML = '<span class="question-number">' + (index + 1) + '.</span>' + question.q;
+                questionDiv.appendChild(questionText);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+
+                const optionKeys = ['A', 'B', 'C', 'D', 'E'];
+                const shuffledKeys = shuffleArray(optionKeys);
+
+                shuffledKeys.forEach(function(key) {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'q' + index;
+                    radio.value = key;
+                    radio.id = 'q' + index + '_' + key;
+
+                    const label = document.createElement('label');
+                    label.htmlFor = 'q' + index + '_' + key;
+                    label.textContent = question.options[key];
+
+                    optionDiv.appendChild(radio);
+                    optionDiv.appendChild(label);
+                    optionDiv.addEventListener('click', function() {
+                        radio.checked = true;
+                    });
+
+                    optionsDiv.appendChild(optionDiv);
+                });
+
+                questionDiv.appendChild(optionsDiv);
+                form.appendChild(questionDiv);
+            });
+        }
+
+        function updateUI() {
+            var data = translations[currentLang];
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+            document.getElementById('intro').innerHTML = data.intro;
+            document.getElementById('submitBtn').textContent = data.submitBtn;
+            document.getElementById('resetBtn').textContent = data.resetBtn;
+        }
+
+        function switchLang(lang) {
+            currentLang = lang;
+            var btns = document.querySelectorAll('.lang-btn');
+            btns.forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            if (lang === 'zh') {
+                btns[0].classList.add('active');
+            } else {
+                btns[1].classList.add('active');
+            }
+            updateUI();
+            renderQuestions();
+            document.getElementById('result').classList.remove('show');
+        }
+
+        function calculateResult() {
+            var data = translations[currentLang];
+            var counts = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+            var allAnswered = true;
+
+            data.questions.forEach(function(_, index) {
+                var selected = document.querySelector('input[name="q' + index + '"]:checked');
+                if (selected) {
+                    counts[selected.value]++;
+                } else {
+                    allAnswered = false;
+                }
+            });
+
+            if (!allAnswered) {
+                alert(data.alertMsg);
+                return;
+            }
+
+            var maxCount = 0;
+            var resultKey = 'A';
+            for (var key in counts) {
+                if (counts[key] > maxCount) {
+                    maxCount = counts[key];
+                    resultKey = key;
+                }
+            }
+
+            var result = data.results[resultKey];
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDesc').textContent = result.desc;
+            document.getElementById('result').classList.add('show');
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            renderQuestions();
+            document.getElementById('result').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        updateUI();
+        renderQuestions();
+    </script>
+</body>
+</html>
